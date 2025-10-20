@@ -1,0 +1,51 @@
+# config.yaml
+# Central configuration for the SFT and PPO pipeline
+
+# --- Shared Model Configuration ---
+model:
+  base_model_name: "meta-llama/Llama-3.1-8B-Instruct"
+  # 4-bit quantization config for QLoRA
+  bnb_config:
+    load_in_4bit: True
+    bnb_4bit_quant_type: "nf4"
+    bnb_4bit_compute_dtype: "torch.bfloat16" # Use bfloat16 for Ampere+ GPUs
+    bnb_4bit_use_double_quant: True
+
+# --- SFT Stage Configuration ---
+sft:
+  # Task 1: Question Answering
+  qa_task:
+    dataset_name: "OpenBookQA"
+    dataset_subset: "main" # Specify subset if needed
+    output_adapter_dir: "models/adapters/openbookqa_sft"
+    training_args:
+      learning_rate: 2.0e-4
+      max_steps: 500
+      per_device_train_batch_size: 4
+      gradient_accumulation_steps: 2
+      
+  # Task 2: Safety
+  safety_task:
+    dataset_name: "Anthropic/hh-rlhf"
+    dataset_subset: "harmlessness_base" # Use the harmlessness subset
+    data_files: "train" # Specify split
+    output_adapter_dir: "models/adapters/safety_sft"
+    training_args:
+      learning_rate: 2.0e-4
+      max_steps: 500
+      per_device_train_batch_size: 4
+      gradient_accumulation_steps: 2
+
+# --- PPO Stage Configuration ---
+ppo:
+  # Hyperparameters for PPO training
+  learning_rate: 1.41e-5
+  batch_size: 16
+  mini_batch_size: 4
+  gradient_accumulation_steps: 1
+  ppo_epochs: 4
+  
+# --- W&B Logging ---
+logging:
+  wandb_project: "llm-alignment-pipeline"
+  run_name_prefix: "run"

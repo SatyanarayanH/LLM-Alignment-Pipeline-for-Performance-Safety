@@ -1,0 +1,17 @@
+# requirements.txt
+
+# Core ML
+torch
+transformers
+datasets
+accelerate
+bitsandbytes
+
+# Fine-Tuning & RL
+peft
+trl
+
+# Utilities
+wandb
+pyyaml
+tqdm
