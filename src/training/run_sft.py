@@ -119,7 +119,6 @@ def main(args):
         model=model,
         train_dataset=dataset,
         peft_config=peft_config,
-        dataset_text_field="text", # Tell the trainer which column has our text
         max_seq_length=1024,
         tokenizer=tokenizer,
         args=training_args,
