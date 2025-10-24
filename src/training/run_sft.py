@@ -119,7 +119,6 @@ def main(args):
         model=model,
         train_dataset=dataset,
         peft_config=peft_config,
-        tokenizer=tokenizer,
         args=training_args,
     )
 
