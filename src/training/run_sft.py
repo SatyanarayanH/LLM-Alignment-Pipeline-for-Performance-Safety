@@ -52,9 +52,10 @@ def main(args):
         dataset = load_dataset(args.dataset_name, args.dataset_subset, split="train")
         dataset = dataset.map(format_openbookqa)
     elif args.task_name == "safety":
-        dataset = load_dataset(args.dataset_name, args.dataset_subset, split="train")
-        # Rename 'chosen' column to 'text' for SFTTrainer
-        dataset = dataset.rename_column("chosen", "text")
+        # This dataset needs the 'data_dir' argument
+    dataset = load_dataset(args.dataset_name, data_dir=args.dataset_subset, split="train")
+    # Rename 'chosen' column to 'text' for SFTTrainer
+    dataset = dataset.rename_column("chosen", "text")
     else:
         raise ValueError(f"Unknown task name: {args.task_name}")
         
